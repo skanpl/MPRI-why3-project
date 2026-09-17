@@ -1,0 +1,12 @@
+
+
+cl = clau_arr
+
+mm = var_assign
+
+nv = len (var_assign)
+
+na =  1≤i≤n st i is the first non-asigned
+
+nc = 0≤i≤len (clau_arr) is nmb of clauses not sat by 
+     curr asign var_assign

@@ -1,0 +1,373 @@
+(*
+    /!\  to make things works
+   i tweaked the sat requirement (added "mm[0]=0")
+*)
+
+
+
+(* Standard library imports *)
+
+use int.Int
+use int.Abs
+use array.Array
+
+(* Helper function for clause swapping *)
+
+use array.ArrayPermut
+
+let swap (a:array 'a) (i:int) (j:int) : unit
+  requires { 0 <= i < length a /\ 0 <= j < length a }
+  writes   { a }
+  ensures  { exchange (old a) a i j }
+= let v = a[i] in
+  a[i] <- a[j];
+  a[j] <- v
+
+(* Simple DPLL *)
+
+type lit = int (* 1-nv .. nv-1 *)
+type cls = (lit, lit, lit)
+
+predicate is_lit (nv: int) (l: lit) =
+  -nv < l < nv
+
+predicate is_cls (nv: int) (c: cls) =
+  let l1, l2, l3 = c in
+  is_lit nv l1 /\ is_lit nv l2 /\ is_lit nv l3
+
+(* An assignment stores for every Boolean variable `i`
+   its "truth value", encoded as an integer, which is
+   either equal to `i` or to `-i`. In this encoding,
+   a non-negative truth value means that the variable
+   is false, and a negative truth value means that the
+   variable is true. Consequently, the variable `0` is
+   always false. *)
+
+type assignment = array int
+
+predicate is_assignment (mm: assignment) (na: int) =
+  0 < na <= length mm /\ mm[0] = 0 /\
+  forall i. 0 <= i < na -> abs mm[i] = i
+
+(* A literal `l` is true in assignment `mm` if and only if
+   it has been assigned a truth value (`|l| < na`), and
+   `mm[abs l]` is different from `l`. If `l` is positive,
+   it is true only if `mm[l]` is negative, and if `l` is
+   negative, it is true only if `mm[l]` is positive.
+   If `l` is zero, `mm[l]` has to be zero, too, and
+   therefore `l` can only be false. *)
+
+predicate ok_lit (mm: assignment) (na: int) (l: lit) =
+  is_lit (length mm) l /\ 0 <= abs l < na <= length mm /\
+  mm[abs l] <> l
+
+predicate ok_cls (mm: assignment) (na: int) (c: cls) =
+  let l1, l2, l3 = c in
+  ok_lit mm na l1 \/ ok_lit mm na l2 \/ ok_lit mm na l3
+
+
+
+
+
+
+
+(*__________my work_________________________*)
+
+
+(*============  scan  =======================*)
+
+(* Function `scan` moves the clases which are true in
+   assignment `mm` outside of the active zone `cl[0..nc)`,
+   and returns the new number of active clases `mc` which
+   has to be smaller or equal than `nc`. It also returns
+   a boolean flag `b` which is set to `false`, when a false
+   clause is discovered (i.e., all three literals have been
+   assigned a false truth value), and therefore the current
+   assignment `mm` cannot possibly be extended to a model. *)
+
+
+(*-----------predicates -----------------------*)
+predicate ldef_pr (mm: assignment) (l:lit)=
+  mm[abs l] = l \/ mm[abs l] = -l
+
+predicate cdef_pr (mm: assignment) (c:cls)=
+  let l1,l2,l3 = c in
+  ldef_pr mm l1/\ ldef_pr mm l2/\ ldef_pr mm l3 
+
+ 
+(*---------- definedness ------------------------*)
+
+
+let cdef mm c (na: int) 
+requires {is_cls (length mm) c }
+returns {b->  
+    b=true <-> cdef_pr mm c
+}
+=
+  let is_lasigned mm l 
+  requires {is_lit (length mm) l }
+  = 
+    mm [abs l] = l || mm [abs l] = -l 
+  in
+  let l1, l2, l3 = c in
+  is_lasigned mm l1 && is_lasigned mm l2 && is_lasigned mm l3
+  
+
+let ldef (mm: assignment) (na :int) (l:lit) 
+requires {is_lit (length mm) l}
+returns {b -> b=true <-> ldef_pr mm l}
+= mm[abs l] = l || mm[abs l] = -l   
+
+
+
+let strong_ldef (mm: assignment) (na :int) (l:lit) 
+requires {is_lit (length mm) l}
+returns {b ->  b=true <-> (abs l < na/\ldef_pr mm l)}
+= abs l < na && ldef mm na l
+
+let strong_cdef (mm: assignment) (na :int) (c:cls) 
+requires {is_cls (length mm) c}
+returns {b -> let l1,l2,l3=c in
+b=true <-> (abs l1 < na/\abs l2 < na/\abs l3 < na/\cdef_pr mm c)}
+= let l1,l2,l3=c in
+  strong_ldef mm na l1 && strong_ldef mm na l2 && strong_ldef mm na l3
+
+
+(*--------- satisfaction------------------------*)
+let okl (mm: assignment) (na :int) (l:lit) : bool 
+requires {is_lit (length mm) l}
+requires {ldef_pr mm l /\ abs l < na<=length mm}
+returns {b-> 
+      (b=true <-> ok_lit mm na l)
+}
+= mm [abs l] <> l
+
+
+
+let okc mm c (na: int) 
+requires {is_cls (length mm) c /\ na<=length mm}
+requires { let l1,l2,l3=c in
+  cdef_pr mm c /\ abs l1 < na /\ abs l2 < na /\ abs l3 < na 
+}
+returns {b->  
+      (b=true <-> ok_cls mm na c)  
+}
+= let l1, l2, l3 = c in
+  (okl mm na l1)|| 
+  (okl mm na l2)|| 
+  (okl mm na l3)
+
+(*----------------------------------------------*)
+let scan (mm: assignment) (cl: array cls) (nv na nc: int) : (b: bool, mc: int)
+requires {forall i. 0 <= i <= length cl -1 -> 
+   is_cls (length mm) cl[i]
+}
+requires {nv>=0/\ 0<=na<=length mm/\ 0<=nc<=length cl}
+requires {forall i. nc<=i <= length cl -1 -> ok_cls mm na cl[i]/\ cdef_pr mm cl[i] }
+
+
+returns {
+    b,mc -> 
+       0<=mc <=nc
+  /\ ((b=true/\ mc=0) -> forall i. 0<=i < length cl -> cdef_pr mm cl[i]  /\ ok_cls mm na cl[i])
+ }
+ensures {forall i. mc<=i <= length cl -1 -> ok_cls mm na cl[i]/\cdef_pr mm cl[i]}
+ensures {forall i. nc<=i <= length cl -1 -> (old cl)[i]=cl[i] }  
+ensures  { permut_all (old cl) cl }
+  returns  { b,mc -> b=false -> 
+    exists i. 0 <= i < length cl /\ not ok_cls mm (length mm) cl[i] }
+
+
+= 
+
+
+
+let ref i = 0 in
+let ref b = true in
+let ref mc = nc in
+for i=0 to length cl -1  do
+
+invariant  {b=false -> 
+    exists i. 0 <= i < length cl /\ not ok_cls mm (length mm) cl[i] }
+
+invariant  { permut_all (old cl) cl }
+invariant {forall i. nc<=i <= length cl -1 -> (old cl)[i]=cl[i] }
+invariant {forall j. mc<=j <= length cl -1 -> cdef_pr mm cl[j]/\ok_cls mm na cl[j]}
+invariant {0<=mc <=nc}  
+invariant {(b=true/\ mc=0) -> forall k. 0<=k < length cl ->
+        cdef_pr mm cl[k]  /\ ok_cls mm na cl[k]}
+
+  while i<mc  do 
+    variant {mc}
+
+    invariant  {b=false -> 
+      exists i. 0 <= i < length cl /\ not ok_cls mm (length mm) cl[i] }   
+    invariant  { permut_all (old cl) cl }
+    invariant {forall i. nc<=i <= length cl -1 -> (old cl)[i]=cl[i] }        
+    invariant {0<=mc <=nc}
+    invariant {forall j. mc<=j <= length cl -1 -> cdef_pr mm cl[j]/\ok_cls mm na cl[j]}
+    
+    if strong_cdef mm na cl[i] then               
+      if okc mm cl[i] na then (mc <- mc-1; swap cl mc i)
+      else (b <- false;  break)
+    else break
+  done 
+done ;(b, mc)
+
+
+
+
+
+(*==========dpll========================*)
+
+let copy_into (mm1 mm2:assignment)   
+requires {length mm1=length mm2}
+ensures {forall na. na>=0 -> is_assignment mm1 na -> is_assignment mm2 na}
+ensures {forall i. 0<=i< length mm2 -> mm1[i]=mm2[i]}
+=
+ for i=0 to length mm2 -1 do
+   invariant {forall j. 0<=j<i -> mm1[j]=mm2[j]}
+   mm2[i] <- mm1[i]
+ done 
+
+
+let fill_from mm na 
+requires {na>=0}
+ensures {is_assignment (old mm) na -> is_assignment mm na}
+ensures { forall i. na<=i<length mm -> abs mm[i]= i}
+ensures {forall c . ok_cls (old mm) na c -> ok_cls mm na c}
+=  
+  for i=0 to length mm -1 do
+    invariant {forall c .  ok_cls (old mm) na c -> ok_cls mm na c}
+    invariant {is_assignment (old mm) na -> is_assignment mm na}
+    invariant { forall k. na<=k<i -> abs mm[k]= k}
+    if i>= na then 
+      mm[i] <- -i
+    else ()  
+  done 
+
+
+
+let build_asgn mm1 mm (na:int)
+requires {length mm1 = length mm }
+requires {0<=na}
+ensures {                
+   (is_assignment mm1 na    ) ->
+is_assignment mm na /\ is_assignment mm (length mm)
+}
+ensures { forall c.   ok_cls mm1 na c -> ok_cls mm na c}
+
+=              
+copy_into mm1 mm ; 
+fill_from mm na
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(* Function `dpll` checks the current state of the search using `scan`,
+   and after that, if the search can be continued, extends the current
+   assignment `mm`, by giving the first unassigned Boolean variable `na`
+   one or the other truth value, as per DPLL procedure. This function
+   returns `true` if `mm` has been extended to a model, and `false`
+   if `mm` cannot possibly be extended to a model. *)
+let rec dpll (mm: assignment) (cl: array cls) (nv na nc: int) : (s: bool)
+requires {is_assignment mm na}
+requires { 0 < length mm }
+requires {
+forall i. 0 <= i <= length cl -1 -> 
+   is_cls (length mm) cl[i]
+}
+requires {nv>=0/\ na>=0}
+requires {0<=nc<=length cl}
+requires {forall i. nc<=i <= length cl -1 -> ok_cls mm na cl[i] /\ cdef_pr mm cl[i]}
+returns {ssss-> ssss=true -> is_assignment mm (length mm) }
+ensures {length (old mm) = length mm}
+ensures {forall i. 0<=i<cl.length -> is_cls (mm.length) cl[i]}
+
+
+returns  { satt -> satt=true ->  forall i. 0 <= i < length cl -> ok_cls mm (length mm) cl[i] }
+
+ensures {forall i. nc<=i <= length cl -1 -> (old cl)[i]=cl[i] }  
+ensures  { permut_all (old cl) cl }
+
+
+
+
+
+
+
+
+= 
+variant {(length mm) -na}
+let mm1 = copy mm in
+let mm2 = copy mm in
+if na < length mm then
+  begin
+                              
+    mm1[na] <- na;               
+    let b,mc = scan mm1 cl nv (na+1) nc in            
+    if b && mc=0 then (build_asgn mm1 mm (na+1);  true) else           
+  
+      if dpll mm1 cl nv (na+1) mc  then ( copy_into mm1 mm ; true)
+      else (                    
+            mm2[na] <- -na;     
+            let b',mc' = scan mm2 cl nv (na+1) nc in
+            if b'&& mc'=0 then (build_asgn mm2 mm (na+1); true) else
+            if dpll mm2 cl nv (na+1) mc' then (copy_into mm2 mm; true) else false
+          )
+                                   
+  end
+else 
+  (assert {na >= length mm}; assert {na = length mm};
+  let b,mc = scan mm cl nv na nc in
+  if b && mc=0 then true else false
+  ) 
+
+
+
+
+(*__________________________________________________*)
+
+
+
+
+
+
+(* Function `sat` implements a simple 3SAT solver. If it returns `true`,
+   assignment `mm` contains a model of the clause set `cl`. If it returns
+   `false`, the clause set `cl` is unsatisfiable. The clauses in `cl` can
+   be reordered during the search. *)
+
+let sat (mm: assignment) (cl: array cls) : (sat: bool)
+  requires {mm[0]=0} (*!!!!!!!!!!*)
+  requires { 0 < length mm }
+  requires { forall i. 0 <= i < length cl -> is_cls (length mm) cl[i] }
+  ensures  { sat -> is_assignment mm (length mm) }
+  ensures  { sat -> forall i. 0 <= i < length cl -> ok_cls mm (length mm) cl[i] }
+  ensures  { not sat -> forall mc. is_assignment mc (length mm) ->
+    exists i. 0 <= i < length cl /\ not ok_cls mc (length mm) cl[i] }
+  ensures  { permut_all (old cl) cl }
+= dpll mm cl (length mm) 1 (length cl)
+
+
+
+
+
+
+
+
+
+
+
+
+

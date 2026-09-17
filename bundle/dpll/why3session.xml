@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Z3" version="4.12.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.1.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml">
+<path name=".."/><path name="dpll.mlw"/>
+<theory name="Top">
+ <goal name="swap&#39;vc" expl="VC for swap" proved="true">
+ <proof prover="2"><result status="valid" time="0.048839" steps="63"/></proof>
+ </goal>
+ <goal name="cdef&#39;vc" expl="VC for cdef" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.082927" steps="378"/></proof>
+ </goal>
+ <goal name="ldef&#39;vc" expl="VC for ldef" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.051386" steps="36"/></proof>
+ </goal>
+ <goal name="strong_ldef&#39;vc" expl="VC for strong_ldef" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.041907" steps="6"/></proof>
+ </goal>
+ <goal name="strong_cdef&#39;vc" expl="VC for strong_cdef" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.064557" steps="141"/></proof>
+ </goal>
+ <goal name="okl&#39;vc" expl="VC for okl" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.046010" steps="23"/></proof>
+ </goal>
+ <goal name="okc&#39;vc" expl="VC for okc" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.066231" steps="168"/></proof>
+ </goal>
+ <goal name="scan&#39;vc" expl="VC for scan" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.627957" steps="3890"/></proof>
+ </goal>
+ <goal name="copy_into&#39;vc" expl="VC for copy_into" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.070049" steps="185"/></proof>
+ </goal>
+ <goal name="fill_from&#39;vc" expl="VC for fill_from" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.167804" steps="1264"/></proof>
+ </goal>
+ <goal name="build_asgn&#39;vc" expl="VC for build_asgn" proved="true">
+ <proof prover="2" timelimit="5"><result status="valid" time="0.153443" steps="984"/></proof>
+ </goal>
+ <goal name="dpll&#39;vc" expl="VC for dpll" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="1636669"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000" steps="141928"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="7405"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="dpll&#39;vc.0" expl="index in array bounds" proved="true">
+  <proof prover="2"><result status="valid" time="0.025355" steps="18"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.029623" steps="35"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.031993" steps="24"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.351064" steps="2224"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.033041" steps="40"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.029810" steps="41"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.063995" steps="306"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.039096" steps="44"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.8" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.089946" steps="397"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.9" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.184708" steps="927"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.10" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.038581" steps="58"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.11" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.034998" steps="44"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.12" expl="variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.031113" steps="34"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.13" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.110332" steps="498"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.14" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.035941" steps="36"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.15" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.085916" steps="403"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.16" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.035116" steps="37"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.17" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.030943" steps="38"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.18" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.037833" steps="50"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.19" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.028638" steps="42"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.20" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.042991" steps="58"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.21" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.039616" steps="46"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.22" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.043121" steps="63"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.23" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.155396" steps="735"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.24" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.046427" steps="114"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.25" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.045498" steps="99"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.26" expl="index in array bounds" proved="true">
+  <proof prover="2"><result status="valid" time="0.033879" steps="42"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.27" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.047470" steps="71"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.28" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.039734" steps="48"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.29" expl="precondition" proved="true">
+  <proof prover="0"><result status="timeout" time="1.000000" steps="1794449"/></proof>
+  <proof prover="1"><result status="timeout" time="1.000000" steps="65595"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="4859"/></proof>
+  <transf name="split_vc" proved="true" >
+   <goal name="dpll&#39;vc.29.0" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.824274" steps="4477"/></proof>
+   </goal>
+   <goal name="dpll&#39;vc.29.1" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.470780" steps="2464"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="dpll&#39;vc.30" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.038911" steps="64"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.31" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.040007" steps="65"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.32" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.162465" steps="710"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.33" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.042352" steps="68"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.34" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.140612" steps="698"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.35" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.306173" steps="1506"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.36" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.057273" steps="201"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.37" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.052799" steps="164"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.38" expl="variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.036798" steps="58"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.39" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.181544" steps="839"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.40" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.036427" steps="60"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.41" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.132592" steps="660"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.42" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.036522" steps="61"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.43" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.041247" steps="62"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.44" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.044706" steps="88"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.45" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.034336" steps="66"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.46" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.038320" steps="96"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.47" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.037222" steps="70"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.48" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.049361" steps="100"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.49" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.194611" steps="1051"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.50" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.064307" steps="297"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.51" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.064956" steps="280"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.52" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.030393" steps="66"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.53" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.032784" steps="66"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.54" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.046329" steps="92"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.55" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.040800" steps="66"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.56" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.058862" steps="249"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.57" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.059266" steps="234"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.58" expl="assertion" proved="true">
+  <proof prover="2"><result status="valid" time="0.030648" steps="18"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.59" expl="assertion" proved="true">
+  <proof prover="2"><result status="valid" time="0.028916" steps="21"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.60" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.030247" steps="27"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.61" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.030733" steps="21"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.62" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.031604" steps="27"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.63" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.034920" steps="41"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.64" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.035253" steps="30"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.65" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.060105" steps="221"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.66" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.035242" steps="48"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.67" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.039911" steps="40"/></proof>
+  </goal>
+  <goal name="dpll&#39;vc.68" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.027868" steps="30"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="sat&#39;vc" expl="VC for sat">
+ <transf name="split_vc" >
+  <goal name="sat&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.050182" steps="26"/></proof>
+  </goal>
+  <goal name="sat&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.043327" steps="6"/></proof>
+  </goal>
+  <goal name="sat&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.037094" steps="12"/></proof>
+  </goal>
+  <goal name="sat&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.045605" steps="6"/></proof>
+  </goal>
+  <goal name="sat&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.042388" steps="10"/></proof>
+  </goal>
+  <goal name="sat&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.041235" steps="13"/></proof>
+  </goal>
+  <goal name="sat&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.043184" steps="16"/></proof>
+  </goal>
+  <goal name="sat&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.048911" steps="22"/></proof>
+  </goal>
+  <goal name="sat&#39;vc.8" expl="postcondition">
+  </goal>
+  <goal name="sat&#39;vc.9" expl="postcondition" proved="true">
+  <proof prover="2" timelimit="5"><result status="valid" time="0.048962" steps="10"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>
